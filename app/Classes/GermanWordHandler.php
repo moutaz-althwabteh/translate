@@ -73,8 +73,12 @@ class GermanWordHandler extends WordHandler
             return;
         }
 
-        $this->exactResults = Word::Where('german_description', 'LIKE', "%$this->word%")
+        $this->exactResults = Word::Where('german_description', 'LIKE', "% ".$this->word." %")
             ->orderBy('rank', 'desc')->limit(10)->get()->toArray();
+//
+//        $this->exactResults = Word::Where('german_description', 'LIKE', $this->word)
+//            ->orderBy('rank', 'desc')->limit(10)->get()->toArray();
+
     }
 
 

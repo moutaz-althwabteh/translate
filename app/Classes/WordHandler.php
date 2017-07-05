@@ -30,7 +30,7 @@ class WordHandler
     public function searchForCloseWords($ids)
     {
         $wordsFromBeginning = Word::whereNotIn('id', $ids)
-            ->where($this->fieldsToSearch, 'LIKE', "$this->word%")
+            ->where($this->fieldsToSearch, 'LIKE', $this->word."%")
             ->limit(25 - count($ids))
             ->orderBy('rank', 'desc')
             ->get()
@@ -55,6 +55,7 @@ class WordHandler
      */
     public function suggestWords()
     {
+
         if(strlen($this->word) > 8)
         {
             $word = str_split($this->word, strlen($this->word) / 3);
@@ -68,7 +69,10 @@ class WordHandler
         }
         else
         {
+
             $word = str_split($this->word, strlen($this->word) / 2);
+
+
             $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
                 ->orWhere($this->fieldsToSearch, 'LIKE', "%$word[1]")
                 ->orderBy('rank', 'desc')

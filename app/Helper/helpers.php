@@ -97,13 +97,14 @@ function fillDatabase()
 {
     $x = 0;
     $limit = 300;
-    while($hello = DB::table('fgd')->offset($x++ * $limit)->limit($limit)->get())
+    while($hello = DB::table('word')->offset($x++ * $limit)->limit($limit)->get())
     {
 
         foreach ($hello as $item)
         {
-            $word = new Word();
-            $word->id = generateRandomId(10, $word);
+//            dd($item->id);
+            $word = Word::find($item->id);
+//            $word->id = generateRandomId(10, $word);
             $word->arabic = $item->arabic;
             $word->arabic_filtered = filterArabicWords($word->arabic);
             $word->article = $item->article;
@@ -115,5 +116,17 @@ function fillDatabase()
     }
 
     return redirect(route('words.index'));
+}
+
+function delete_all_between($beginning, $end, $string) {
+    $beginningPos = strpos($string, $beginning);
+    $endPos = strpos($string, $end);
+    if ($beginningPos === false || $endPos === false) {
+        return $string;
+    }
+
+    $textToDelete = substr($string, $beginningPos, ($endPos + strlen($end)) - $beginningPos);
+
+    dd(str_replace($textToDelete, '', $string));
 }
 

@@ -6,13 +6,13 @@ use App\Classes\ArabicWordHandler;
 use App\Classes\GermanWordHandler;
 use App\Word;
 use Illuminate\Http\Request;
-use tst\tst;
 
 class tstController extends Controller
 {
     public function index()
     {
-
+//        fillDatabase();
+//        (delete_all_between("{","}","szdas {dwa}"));
        return view('words.index');
 
     }
@@ -23,11 +23,13 @@ class tstController extends Controller
         {
             return view('words.index');
         }
+
         $searchWord = trim($request->search);
-        if (isArabic($searchWord))
+        if (isArabic($searchWord)) {
             $wordHandler = new ArabicWordHandler(new Word(), $searchWord, 'arabic');
-        else
+        } else {
             $wordHandler = new GermanWordHandler(new Word(), $searchWord, 'german');
+        }
 
         $words = $wordHandler->handleWord();
 

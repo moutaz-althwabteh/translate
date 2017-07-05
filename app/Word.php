@@ -12,7 +12,7 @@ class Word extends Model
         [
 //            'id',
             'arabic',
-//            'arabic_filtered',
+            'arabic_filtered',
             'german',
             'article',
             'arabic_description',
