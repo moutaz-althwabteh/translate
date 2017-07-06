@@ -77,9 +77,13 @@ class ArabicWordHandler extends WordHandler
 
         $prefix = 'ال';
         // search without ال
+
         if (substr($this->word, 0, strlen($prefix)) == $prefix)
         {
+
+            //filter input string
             $str = substr($this->word, strlen($prefix));
+
             $this->exactResults = Word::where($this->fieldsToSearch, $str)
                 ->orderBy('rank', 'desc')->get()->toArray();
         }

@@ -11,8 +11,10 @@ class tstController extends Controller
 {
     public function index()
     {
-//        fillDatabase();
-//        (delete_all_between("{","}","szdas {dwa}"));
+//
+//        set_time_limit(1000);
+//        fillDatabase2();
+//        dd(delete_all_between("{","}","(adj.) [größer ; am größten ] "));
        return view('words.index');
 
     }
@@ -26,7 +28,7 @@ class tstController extends Controller
 
         $searchWord = trim($request->search);
         if (isArabic($searchWord)) {
-            $wordHandler = new ArabicWordHandler(new Word(), $searchWord, 'arabic');
+            $wordHandler = new ArabicWordHandler(new Word(), $searchWord, 'arabic_filtered');
         } else {
             $wordHandler = new GermanWordHandler(new Word(), $searchWord, 'german');
         }

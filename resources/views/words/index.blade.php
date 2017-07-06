@@ -6,7 +6,7 @@
 		<div class="container">
 			@if(isset($words))
 				@if(isset($words['suggestion']))
-					<h1 class="text-center text-danger">{{"$searchWord"}} NOT FOUND :(</h1>
+					<h1 class="text-center text-danger">لايوجد نتيجة لكلمة : {{"$searchWord"}} </h1>
 					@if(count($words['suggestion']))
 						<h4 class="text-center"> هل تقصد </h4>
 						<h5 class="text-center">
@@ -79,7 +79,7 @@
 					</div>
 					@endforeach
 					@if(isset($words['close']))
-						<h5 class="text-right">كلمات مشابهة</h5>
+						<h5 class="text-warning text-success text-right">كلمات مشابهة</h5>
 						@foreach($words['close'] as $word)
 						<div class="row single-row-translation single-{{$counter++ % 2 == 0? 'orange' : 'white'}}">
 							<div class="col-md-4 col-md-offset-1 col-xs-12 text-left col-sm-4">

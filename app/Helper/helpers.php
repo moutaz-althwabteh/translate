@@ -118,7 +118,46 @@ function fillDatabase()
     return redirect(route('words.index'));
 }
 
+function fillDatabase2()
+{
+    $x = 0;
+    $limit = 300;
+    while($hello = DB::table('word')->offset($x++ * $limit)->limit($limit)->get())
+    {
+
+        foreach ($hello as $item)
+        {
+//            dd($item->id);
+            $word = Word::find($item->id);
+//            $word->id = generateRandomId(10, $word);
+//            $word->arabic = $item->arabic;
+//            $word->arabic_filtered = filterArabicWords($word->arabic);
+//            $word->article = $item->article;
+//            $word->german = $item->german;
+//            $word->arabic_description = $item->arabic_description;
+//            $word->german_description = $item->german_description;
+            $word->german_description_filter=delete_all_between("{","}",$item->german_description);
+            $word->save();
+        }
+    }
+
+    return redirect(route('words.index'));
+}
+
 function delete_all_between($beginning, $end, $string) {
+    $string=trim($string," ");
+    $beginningPos = strpos($string, $beginning);
+    $endPos = strpos($string, $end);
+    if ($beginningPos === false || $endPos === false) {
+        return (delete_all_between2("(",")",$string));
+    }
+
+    $textToDelete = substr($string, $beginningPos, ($endPos + strlen($end)) - $beginningPos);
+
+    return (delete_all_between2("(",")",str_replace($textToDelete, '', $string)));
+}
+function delete_all_between2($beginning, $end, $string) {
+    $string=trim($string," ");
     $beginningPos = strpos($string, $beginning);
     $endPos = strpos($string, $end);
     if ($beginningPos === false || $endPos === false) {
@@ -126,7 +165,7 @@ function delete_all_between($beginning, $end, $string) {
     }
 
     $textToDelete = substr($string, $beginningPos, ($endPos + strlen($end)) - $beginningPos);
-
-    dd(str_replace($textToDelete, '', $string));
+    return str_replace($textToDelete, '', $string);
 }
+
 
