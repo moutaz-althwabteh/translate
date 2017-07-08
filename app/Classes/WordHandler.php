@@ -4,6 +4,7 @@ namespace App\Classes;
 
 
 use App\Word;
+use Illuminate\Support\Facades\DB;
 
 class WordHandler
 {
@@ -31,18 +32,17 @@ class WordHandler
     {
 
         $wordsFromBeginning = Word::whereNotIn('id', $ids)
-            ->where($this->fieldsToSearch, 'LIKE', $this->word."%")
+            ->where($this->fieldsToSearch, 'LIKE', $this->word . "%")
             ->limit(25 - count($ids))
             ->orderBy('rank', 'desc')
             ->get()
             ->toArray();
 
-        foreach($wordsFromBeginning as $word)
-        {
+        foreach ($wordsFromBeginning as $word) {
             array_push($ids, $word['id']);
         }
 
-        $wordsFromBothSides = Word::where($this->fieldsToSearch, 'LIKE', "%".$this->word."%")
+        $wordsFromBothSides = Word::where($this->fieldsToSearch, 'LIKE', "%" . $this->word . "%")
             ->whereNotIn('id', $ids)
             ->orderBy('rank', 'desc')
             ->limit(30 - count($ids))
@@ -59,53 +59,81 @@ class WordHandler
      */
     public function suggestWords()
     {
+//        $this->word='anrechne';
+        $column = '';
 
-        if(strlen($this->word) > 8)
-        {
+        if (isArabic($this->word))
+            $column = 'arabic';
+        else
+            $column = 'german';
 
-//            $word = str_split($this->word, strlen($this->word) / 3);
-//            dd($word);
-//            dd(preg_split('//u', $this->word, strlen($this->word) / 3, PREG_SPLIT_NO_EMPTY));
-            $word=preg_split('//u', $this->word, strlen($this->word) / 3, PREG_SPLIT_NO_EMPTY);
+        $output = array();
+        $wordOutput = array();
+        $words = DB::select('select * from word where LEFT (' . $column . ',1)="' . substr($this->word, 0, 1) . '"');
 
-            $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', $word[0]."%")
-                ->orWhere("$this->fieldsToSearch", 'LIKE', "%".$word[1]."%")
-                ->orWhere($this->fieldsToSearch, 'LIKE', "%".$word[2])
-                ->orderBy('rank', 'desc')
-                ->limit(10)
-                ->get();
+        foreach ($words as $word) {
 
-        } else {
-
-            if (strlen($this->word) == 1) {
-
-                $word[0] = ($this->word);
-                $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
-                    ->orderBy('rank', 'desc')
-                    ->limit(10)
-                    ->get();
-            } else {
-
-                $word=preg_split('//', $this->word,strlen($this->word) / 2 , PREG_SPLIT_NO_EMPTY);
-//                $word = str_split($this->word, strlen($this->word) / 2);
-//                dd(preg_split('//u', $this->word, strlen($this->word) / 2, PREG_SPLIT_NO_EMPTY));
-                try{
-                    $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
-                        ->orWhere($this->fieldsToSearch, 'LIKE', "%$word[1]")
-                        ->orderBy('rank', 'desc')
-                        ->limit(10)
-                        ->get();
-                }catch (\Exception $e){
-                    $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
-                     //   ->orWhere($this->fieldsToSearch, 'LIKE', "%$word[1]")
-                        ->orderBy('rank', 'desc')
-                        ->limit(10)
-                        ->get();
+            if (!in_array($word->$column, $wordOutput)) {
+                echo $word->$column, '<br/>';
+                similar_text($this->word, $word->$column, $parcent);
+                if ($parcent > 82) {
+                    $output[] = $word;
+                    $wordOutput[] = $word->$column;
                 }
 
             }
 
         }
+
+        $this->suggestResults = $output;
+        dd('s');
+//        if(strlen($this->word) > 8)
+//        {
+//
+////            $word = str_split($this->word, strlen($this->word) / 3);
+////            dd($word);
+////            dd(preg_split('//u', $this->word, strlen($this->word) / 3, PREG_SPLIT_NO_EMPTY));
+//            $word=preg_split('//u', $this->word, strlen($this->word) / 3, PREG_SPLIT_NO_EMPTY);
+//
+//            $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', $word[0]."%")
+//                ->orWhere("$this->fieldsToSearch", 'LIKE', "%".$word[1]."%")
+//                ->orWhere($this->fieldsToSearch, 'LIKE', "%".$word[2])
+//                ->orderBy('rank', 'desc')
+//                ->limit(10)
+//                ->get();
+//
+//        } else {
+//
+//            if (strlen($this->word) == 1) {
+//
+//                $word[0] = ($this->word);
+//                $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
+//                    ->orderBy('rank', 'desc')
+//                    ->limit(10)
+//                    ->get();
+//            } else {
+////                dd(mb_strlen($this->word));
+//                $word=preg_split('//u', $this->word,mb_strlen($this->word) / 2 , PREG_SPLIT_NO_EMPTY);
+//
+////                $word = str_split($this->word, strlen($this->word) / 2);
+////                dd(preg_split('//u', $this->word, strlen($this->word) / 2, PREG_SPLIT_NO_EMPTY));
+//                try{
+//                    $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
+//                        ->orWhere($this->fieldsToSearch, 'LIKE', "%$word[1]")
+//                        ->orderBy('rank', 'desc')
+//                        ->limit(10)
+//                        ->get();
+//                }catch (\Exception $e){
+//                    $this->suggestResults = Word::where($this->fieldsToSearch, 'LIKE', "$word[0]%")
+//                     //   ->orWhere($this->fieldsToSearch, 'LIKE', "%$word[1]")
+//                        ->orderBy('rank', 'desc')
+//                        ->limit(10)
+//                        ->get();
+//                }
+//
+//            }
+//
+//        }
 
     }
 

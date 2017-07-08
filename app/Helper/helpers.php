@@ -167,5 +167,7 @@ function delete_all_between2($beginning, $end, $string) {
     $textToDelete = substr($string, $beginningPos, ($endPos + strlen($end)) - $beginningPos);
     return str_replace($textToDelete, '', $string);
 }
-
+function replaceString($string){
+    return  preg_replace('~[\\\\/:*?"<>|]~', '', $string);
+}
 

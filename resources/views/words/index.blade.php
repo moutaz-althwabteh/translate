@@ -146,15 +146,22 @@
     <link rel="stylesheet" type="text/css" href="{{asset('js/jquery-ui-1.12.1/jquery-ui.min.css')}}">
 @stop
 @section('extra-js')
-	<script src="{{asset('js/jquery-ui-1.12.1/jquery-ui.min.js')}}"></script>
-	{{--<script>--}}
-
-        {{--$( "#main-search" ).autocomplete({--}}
-            {{--source: '{{route('ajax.search')}}',--}}
-            {{--select: function( event, ui ) {--}}
-            	{{--$('#search-form').submit();--}}
-            {{--}--}}
-        {{--});--}}
-	{{--</script>--}}
 	<script src="{{asset('js/right-left-search.js')}}"></script>
+	{{--<style>--}}
+		{{--li { background: white; }--}}
+		{{--li:nth-child(odd) { background: lightgray; }--}}
+	{{--</style>--}}
+	<script src="{{asset('js/jquery-ui-1.12.1/jquery-ui.min.js')}}"></script>
+	<script>
+
+        $( "#main-search" ).autocomplete({
+            source: '{{route('ajax.search')}}',
+            select: function( event, ui ) {
+              $('#main-search').val(ui.item.value);
+            	$('#search-form').submit();
+            }
+        });
+
+	</script>
+
 @stop

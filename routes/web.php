@@ -13,4 +13,4 @@
 
 Route::get('/','tstController@index');
 Route::get('/search', ['as' =>'word.search', 'uses' => 'tstController@search']);
-Route::get('/autoSearch', ['as' => 'ajax.search', 'uses' => 'tstController@index']);
+Route::get('/autoSearch', ['as' => 'ajax.search', 'uses' => 'tstController@ajaxSearch']);
