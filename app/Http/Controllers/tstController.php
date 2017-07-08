@@ -12,12 +12,12 @@ class tstController extends Controller
 {
     public function index()
     {
-//        dd(replaceString("[ssa]"));
+//        dd(replaceString("[~ssa]"));
 ////
 //        set_time_limit(1000);
 //        fillDatabase2();
 ////        dd(delete_all_between("{","}","(adj.) [größer ; am größten ] "));
-       return view('words.index');
+       return view('new.master');
 
 
     }
@@ -26,7 +26,7 @@ class tstController extends Controller
 
         if(!$request->has('search') || !trim($request->search))
         {
-            return view('words.index');
+            return view('words.index2');
         }
 
         $searchWord = trim($request->search);
@@ -39,7 +39,7 @@ class tstController extends Controller
         $words = $wordHandler->handleWord();
 
         $counter = 0;
-        return view('words.index', compact( 'words', 'counter','searchWord'));
+        return view('words.index2', compact( 'words', 'counter','searchWord'));
     }
 
     public function ajaxSearch(Request $request)

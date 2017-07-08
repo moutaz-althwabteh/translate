@@ -136,7 +136,7 @@ function fillDatabase2()
 //            $word->german = $item->german;
 //            $word->arabic_description = $item->arabic_description;
 //            $word->german_description = $item->german_description;
-            $word->german_description_filter=delete_all_between("{","}",$item->german_description);
+            $word->german_description_filter=replaceString($item->german_description_filter);
             $word->save();
         }
     }
@@ -168,6 +168,9 @@ function delete_all_between2($beginning, $end, $string) {
     return str_replace($textToDelete, '', $string);
 }
 function replaceString($string){
-    return  preg_replace('~[\\\\/:*?"<>|]~', '', $string);
+    return replaceString2(str_replace('[','',$string));
+}
+function replaceString2($string){
+    return (str_replace(']','',$string));
 }
 

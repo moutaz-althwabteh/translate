@@ -59,24 +59,23 @@ class WordHandler
      */
     public function suggestWords()
     {
-//        $this->word='anrechne';
         $column = '';
-
         if (isArabic($this->word))
             $column = 'arabic';
         else
             $column = 'german';
 
+
         $output = array();
         $wordOutput = array();
-        $words = DB::select('select * from word where LEFT (' . $column . ',1)="' . substr($this->word, 0, 1) . '"');
+        $words = DB::select('select * from word where LEFT (' . $column . ',1)="' . mb_substr($this->word, 0, 1) . '"');
 
         foreach ($words as $word) {
 
             if (!in_array($word->$column, $wordOutput)) {
-                echo $word->$column, '<br/>';
+//                echo $word->$column, '<br/>';
                 similar_text($this->word, $word->$column, $parcent);
-                if ($parcent > 82) {
+                if ($parcent > 70) {
                     $output[] = $word;
                     $wordOutput[] = $word->$column;
                 }
@@ -86,7 +85,7 @@ class WordHandler
         }
 
         $this->suggestResults = $output;
-        dd('s');
+
 //        if(strlen($this->word) > 8)
 //        {
 //
