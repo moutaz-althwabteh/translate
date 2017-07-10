@@ -45,7 +45,7 @@ class GermanWordHandler extends WordHandler
         {
             array_push($ids, $result['id']);
         }
-        $this->searchForCloseWords($ids);
+//        $this->searchForCloseWords($ids);
         if(!count($this->exactResults) && !count($this->closeResults))
         {
             $this->suggestWords();
@@ -73,10 +73,10 @@ class GermanWordHandler extends WordHandler
             return;
         }
 
-        $this->exactResults = Word::Where('german_description_filter', 'LIKE', "% ".$this->word." %")
+        $this->exactResults = Word::Where('german_description', 'LIKE', "% ".$this->word."%")
             ->orderBy('rank', 'desc')->limit(10)->get()->toArray();
 
-
+//        dd($this->exactResults);
 
     }
 

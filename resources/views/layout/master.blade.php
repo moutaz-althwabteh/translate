@@ -143,9 +143,9 @@
 <!-- ***************** END NAVSEARCH ******************** -->
 
 <div id="body">
-@yield('content')
+    @yield('content')
 </div>
-
+<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
 @yield('extra-js')
 </body>
 </html>

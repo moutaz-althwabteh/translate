@@ -68,7 +68,8 @@ function isArabic($word)
  * filters Arabic
  * @return mixed
  */
-function filterArabicWords($word) {
+function filterArabicWords($word)
+{
     //Find values and replace with associated key
     $filters = array(
         'ا' => array('أ', 'إ', 'آ'),
@@ -77,6 +78,24 @@ function filterArabicWords($word) {
         'ء' => array('ئ', 'ؤ','ء'),
         '' => array('ـ', 'ُ', 'ْ', 'َ', 'ِ', 'ّ', '~', 'ٍ', 'ً', 'ٌ'),
         ' ' => array('[', ']', '(', ')', '_', '-', '{', '}', '/', '\\', '.')
+    );
+
+    //Loop through the filters we have and call str_replace to replace any confusing chars
+    foreach ($filters as $replaceWith => $find) {
+        $word = str_replace($find, $replaceWith, $word);
+    }
+
+    //Replace 2+ spaces that may occur in the word to only one space
+    return  preg_replace("/\s{2,}/", ' ', $word);
+
+}
+
+function filterGermanDesc($word)
+{
+    //Find values and replace with associated key
+    $filters = array(
+
+        '' => array('[', ']', '(', ')', '{', '}', 'v.', 'n.', 'adj.','.')
     );
 
     //Loop through the filters we have and call str_replace to replace any confusing chars
@@ -136,7 +155,7 @@ function fillDatabase2()
 //            $word->german = $item->german;
 //            $word->arabic_description = $item->arabic_description;
 //            $word->german_description = $item->german_description;
-            $word->german_description_filter=replaceString($item->german_description_filter);
+            $word->german_description_filter=filterGermanDesc(delete_all_between("{","}",$item->german_description));
             $word->save();
         }
     }
