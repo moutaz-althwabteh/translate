@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('new/css/bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('new/css/bootstrap-rtl.min.css')}}">
     <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('js/jquery-ui-1.12.1/jquery-ui.min.css')}}">
 
     @yield('extra-css')
 </head>
@@ -97,7 +98,8 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <img src="new/img/lang.png" class="img-responsive marto"/>
+                    <img src="img/lang.png"  class="img-responsive marto"/>
+{{--                    <img src="{{asset('img/lang.png')}}" class="img-responsive marto"/>--}}
                 </div>
 
                 <div class="martop  col-sm-2 glyphicon glyphicon-th ">
@@ -117,7 +119,8 @@
 </div>
 <div class="clearfix"></div>
 <div align="center">
-    <img src="new/img/googleplay.png" class="img img-responsive gooplay" alt=""/>
+    <img src="img/googleplay.png"  class="img img-responsive gooplay"/>
+    {{--<img src="{{asset('img/googleplay.png')}}" class="img img-responsive gooplay" alt=""/>--}}
 </div>
 </div>
 <div class="col-sm-1">

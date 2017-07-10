@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\ArabicWordHandler;
 use App\Classes\GermanWordHandler;
+use App\Example;
 use App\Word;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ class tstController extends Controller
 //        set_time_limit(1000);
 //        fillDatabase2();
 
-       return view('layout.master');
+       return view('new.master');
 
 
     }
@@ -24,7 +25,7 @@ class tstController extends Controller
 
         if(!$request->has('search') || !trim($request->search))
         {
-            return view('words.index');
+            return view('words.index2');
         }
 
         $searchWord = trim($request->search);
@@ -37,7 +38,7 @@ class tstController extends Controller
         $words = $wordHandler->handleWord();
 
         $counter = 0;
-        return view('words.index', compact( 'words', 'counter','searchWord'));
+        return view('words.index2', compact( 'words', 'counter','searchWord'));
     }
 
     public function ajaxSearch(Request $request)
@@ -95,6 +96,17 @@ class tstController extends Controller
 //        }
 
         return $data;
+    }
+
+    public function searchExample(Request $request)
+    {
+//        dd($request->all());
+        $this->exampleResults = Example::Where('deutsch', 'LIKE', "%".$request->german."%")->get();
+//        $this->exampleResults=Example::Where('arabic', 'LIKE', "%".$request->arabic."%")->get();
+        $examples= $this->exampleResults;
+        $counterExample=0;
+
+        return view('words.index2', compact( 'examples','counterExample'));
     }
 
 }

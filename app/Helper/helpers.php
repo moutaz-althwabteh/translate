@@ -68,6 +68,18 @@ function isArabic($word)
  * filters Arabic
  * @return mixed
  */
+function filterWord($word){
+    $filters = array(
+        '' => array('ال,',',ال', ',', '.',',','ال', 'ٍ','ـ', 'ُ', 'ْ', 'َ', 'ِ', 'ّ', '~', 'ٍ', 'ً', 'ٌ','[', ']', '(', ')', '_', '-', '{', '}', '/', '\\', '.','،')
+//        ' '=>array(',')
+    );
+    foreach ($filters as $replaceWith => $find) {
+        $word = str_replace($find, $replaceWith, $word);
+    }
+//var_dump(preg_replace("/\s{2,}/", ' ', $word));
+    //Replace 2+ spaces that may occur in the word to only one space
+    return  preg_replace("/\s{2,}/", ' ', $word);
+}
 function filterArabicWords($word)
 {
     //Find values and replace with associated key
@@ -95,7 +107,84 @@ function filterGermanDesc($word)
     //Find values and replace with associated key
     $filters = array(
 
-        '' => array('[', ']', '(', ')', '{', '}', 'v.', 'n.', 'adj.','.')
+//        '' => array('[', ']', '(', ')', '{', '}', 'v.', 'n.', 'adj.','.','')
+//    ''=>array(
+//
+//
+//        'educ.',
+//        'Surv.',
+//        'Pl.',
+//        'form.Sing.',
+//        'zool.',
+//        'sport',
+//        'psych.',
+//        'tv.',
+//        'pol.',
+//        'Meteor.',
+//        'nutr.',
+//        'med.',
+//
+//        'geogr.',
+//        'elect.',
+//        'econ.',
+//        'ecol.',
+//        'comp.',
+//        'bot.',
+//        'med.',
+//        ',',
+//        'Auto.',
+//        'comm.',
+////        '',
+//        'adj.',
+//        'adv.',
+//        'bank',
+//        'comp.',
+//        'educ.',
+//        'geogr.',
+//        'geol.',
+//        'ant.',
+//        'Arabisch',
+//        'astron.',
+//        'Auto.',
+//        'Band',
+//        'geogr.',
+//        'biol.',
+//        'bot.',
+//        'chem.',
+//        'comp.',
+//        'ecol.',
+//        'econ.',
+//        'geogr.',
+//        'ind.',
+//        'admin.',
+//        'elect.',
+//        'comm.',
+//        'ind.',
+//        'jorn.',
+//        'lang.',
+//        'law.',
+//        'law',
+//        'lit.',
+//        'math.',
+//        'Meteor.',
+//        'mil.',
+//        'mus.',
+//        'Mythologie',
+//        'Nummer',
+//        'Person.',
+//        'Pl.',
+//        'pol.',
+//        'umgang.',
+//        'relig.','prep.',
+//        '[',']',
+//        'v.',
+//        'Pl.',
+//        '(n.)',
+//        '(v.)',
+//        '(',
+//        ')'
+//    )
+    ''=>array('{','}')
     );
 
     //Loop through the filters we have and call str_replace to replace any confusing chars
@@ -155,7 +244,7 @@ function fillDatabase2()
 //            $word->german = $item->german;
 //            $word->arabic_description = $item->arabic_description;
 //            $word->german_description = $item->german_description;
-            $word->german_description_filter=filterGermanDesc(delete_all_between("{","}",$item->german_description));
+            $word->german_description_filter2=filterGermanDesc($item->german_description_filter2);
             $word->save();
         }
     }
@@ -186,10 +275,29 @@ function delete_all_between2($beginning, $end, $string) {
     $textToDelete = substr($string, $beginningPos, ($endPos + strlen($end)) - $beginningPos);
     return str_replace($textToDelete, '', $string);
 }
+
 function replaceString($string){
     return replaceString2(str_replace('[','',$string));
 }
 function replaceString2($string){
     return (str_replace(']','',$string));
+}
+
+function markeWored($statment,$word){
+    $array = explode(' ', $statment);
+//    dd($array);
+//    var_dump($array);
+    $stat='';
+
+    foreach ($array as $item){
+       if(strcmp(filterWord($item),filterWord($word))==0) {
+           $stat = $stat . ' ' . '<mark>' . $item . '</mark>';
+       }
+       else
+           $stat=$stat.' '.$item;
+
+     }
+    echo $stat;
+
 }
 

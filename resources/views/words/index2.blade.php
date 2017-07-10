@@ -25,6 +25,7 @@
                 @endif
                 @if(!isset($words['suggestion']))
                         <table class="table table-responsive  ">
+                        @if(isset($words['exact']))
                         @foreach($words['exact'] as $word)
 
                                 <tr class="{{$counter++ % 2 == 0? 'm-color' : 'm-noncolor'}}">
@@ -36,6 +37,8 @@
                                         <span>{{$word['arabic_description'] . ' '}}</span>
                                         </a>
                                     </td>
+                                    </td>
+                                    <td><a href="{{route('word.searchExample', ['german'=>$word['german'],'arabic'=>$word['arabic'],'search'=>$_GET['search']])}}">الأمثلة</a></td>
                                     <td class="" >
                                         <a href="{{route('word.search', ['search'=>$word['german']])}}">
 {{--                                            <span>{{$word['german_description	'] . ' '}}</span>--}}
@@ -49,10 +52,11 @@
                                 </tr>
 
                         @endforeach
+                        @endif
                             @if(isset($words['close']))
                                 @if(count($words['close']))
                                 <tr>
-                                    <td colspan="2"><h3 class="text-primary  text-center">كلمات مشابهة</h3></td>
+                                    <td colspan="3"><h3 class="text-primary  text-center">كلمات مشابهة</h3></td>
                                 </tr>
                                 @endif
                                 @foreach($words['close'] as $word)
@@ -64,6 +68,8 @@
                                                 <span>{{$word['arabic_description'] . ' '}}</span>
                                             </a>
                                         </td>
+                                        <td><a href="{{route('word.searchExample', ['german'=>$word['german'],'arabic'=>$word['arabic']])}}">الأمثلة</a></td>
+
                                         <td class="" >
                                             <a href="{{route('word.search', ['search'=>$word['german']])}}">
                                                 <span dir="ltr">{{$word['german_description'] . ' '}} </span>
@@ -75,6 +81,37 @@
 
                                 @endforeach
                              @endif
+
+                            @if(isset($examples))
+                                @if(count($examples))
+                                    <tr>
+                                        <td colspan="3"><h3 class="text-primary  text-center">الأمثلة</h3></td>
+                                    </tr>
+                                @endif
+                                @foreach($examples as $example )
+                                    <tr class="{{$counterExample++ % 2 == 0? 'm-color' : 'm-noncolor'}}">
+                                        <td class="">
+                                            <button class="btn btn-link" onclick="responsiveVoice.speak('{{$example->arabic}}','Arabic Male')"><span class="glyphicon glyphicon-volume-up"></span></button>
+                                            <a href="#">
+                                                {{--href="{{route('word.search', ['search'=>$word['arabic']])}}"--}}
+                                                <span class="title">{{markeWored($example->arabic,$_GET['arabic'])}}</span>
+                                                {{--<span>{{$word['arabic_description'] . ' '}}</span>--}}
+                                            </a>
+                                        </td>
+                                        <td></td>
+
+                                        <td class="" >
+                                            <a >
+                                                {{--href="{{route('word.search', ['search'=>$word['german']])}}"--}}
+                                                {{--<span dir="ltr">{{$word['german_description'] . ' '}} </span>--}}
+                                                <span class="title">{{markeWored($example->deutsch,$_GET['german'])}}</span>
+                                            </a>
+                                            <button class="btn btn-link" onclick="responsiveVoice.speak('{{$example->deutsch}}','Deutsch Female')"><span class="glyphicon glyphicon-volume-up"></span></button>
+                                        </td>
+                                    </tr>
+
+                                @endforeach
+                            @endif
 
                         </table>
 

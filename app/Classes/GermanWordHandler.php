@@ -45,7 +45,7 @@ class GermanWordHandler extends WordHandler
         {
             array_push($ids, $result['id']);
         }
-//        $this->searchForCloseWords($ids);
+       $this->searchForCloseWords($ids);
         if(!count($this->exactResults) && !count($this->closeResults))
         {
             $this->suggestWords();
